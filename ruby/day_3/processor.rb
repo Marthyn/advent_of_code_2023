@@ -2,7 +2,7 @@ require 'pry'
 class Entry
   attr_reader :character, :x, :y
 
-  SYMBOLS = %w[* + & = $ @ / - % #].freeze
+  SYMBOLS = %w[*].freeze
 
   def initialize(character, x, y)
     @character = character
@@ -89,13 +89,15 @@ class Map
   end
 
   def all_numbers_with_symbols
-    adjecent_to_symbol_locations_with_numbers.uniq.map do |x, y|
-      find_full_number(x, y)
-    end.uniq(&:signature)
+    adjecent_to_symbol_locations_with_numbers.select do |gear, ratios|
+      ratios.uniq(&:to_s).count == 2
+    end.map do |gear, ratios|
+      ratios.uniq(&:to_s).map(&:integer).inject(:*)
+    end
   end
 
   def adjecent_to_symbol_locations_with_numbers
-    @adjecent_to_symbol_locations_with_numbers = []
+    @adjecent_to_symbol_locations_with_numbers = {}
     symbol_locations.each do |symbol|
       right = [symbol.x + 1, symbol.y]
       left = [symbol.x - 1, symbol.y]
@@ -110,7 +112,8 @@ class Map
 
       valid_positions.each do |x, y|
         if character_at(x, y).match?(/[0-9]/)
-          @adjecent_to_symbol_locations_with_numbers << [x, y]
+          @adjecent_to_symbol_locations_with_numbers[symbol.to_s] = [] if @adjecent_to_symbol_locations_with_numbers[symbol.to_s].nil?
+          @adjecent_to_symbol_locations_with_numbers[symbol.to_s] += [find_full_number(x, y)]
         end
       end
     end

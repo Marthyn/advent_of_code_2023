@@ -4,14 +4,14 @@ file = File.open('verify_input.txt')
 input = file.read
 
 map = Map.new(input)
-puts map.all_numbers_with_symbols
-puts map.all_numbers_with_symbols.sum(&:integer)
+pp map.adjecent_to_symbol_locations_with_numbers
+pp map.all_numbers_with_symbols
+pp map.all_numbers_with_symbols.sum
 
 file = File.open('input.txt')
 input = file.read
 
-puts input.chars.uniq
-
 map = Map.new(input)
-puts map.all_numbers_with_symbols
-puts map.all_numbers_with_symbols.sum(&:integer)
+pp map.adjecent_to_symbol_locations_with_numbers
+pp map.all_numbers_with_symbols
+pp map.all_numbers_with_symbols.sum
